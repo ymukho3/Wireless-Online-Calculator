@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wireless Design Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, rgba(0, 0, 50, 0.8), rgba(0, 40, 80, 0.8)),
+                  url('https://i.pinimg.com/736x/05/2d/16/052d165e00505a70f2bd5539f70d53f1.jpg')
+                  no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(0, 0, 50, 0.9), rgba(0, 40, 80, 0.9));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 2000;
+      animation: fadeOut 2s ease-in-out 4s forwards;
+    }
+
+    .wireless-icon {
+      width: 140px;
+      height: 140px;
+      background: url('../static/images/Animation.gif') no-repeat center;
+      background-size: contain;
+      margin-bottom: 1.5rem;
+    }
+
+    .splash-screen h1 {
+      font-size: 3rem;
+      color: #00b7eb;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    .splash-screen p {
+      font-size: 1.5rem;
+      color: #f0f0f0;
+      text-align: center;
+      line-height: 1.8;
+      padding: 0 1rem;
+    }
+
+    .splash-screen p span {
+      display: block;
+      animation: fadeInUp 1.5s ease-out backwards;
+    }
+
+    .splash-screen p span:nth-child(1) { animation-delay: 0.5s; }
+    .splash-screen p span:nth-child(2) { animation-delay: 1s; }
+    .splash-screen p span:nth-child(3) { animation-delay: 1.5s; }
+
+    @keyframes wave {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .content-box {
+      margin-top: 120px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2.5rem;
+      border-radius: 16px;
+      max-width: 650px;
+      text-align: center;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      opacity: 0;
+      animation: fadeIn 0.5s ease-in-out 4.5s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .content-box h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1.2rem;
+      color: #00b7eb;
+    }
+
+    .content-box p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: #f0f0f0;
+    }
+
+    .content-box a {
+      display: inline-block;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      background: #3b82f6;
+      padding: 0.8rem 2rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .content-box a:hover {
+      background: #2563eb;
+    }
+
+    @media (max-width: 768px) {
+      .splash-screen h1 { font-size: 2.5rem; }
+      .splash-screen p { font-size: 1.2rem; }
+      .wireless-icon { width: 60px; height: 60px; }
+      .content-box {
+        margin: 100px 1.5rem 1rem;
+        padding: 2rem;
+      }
+      .content-box h1 { font-size: 2rem; }
+      .content-box p { font-size: 1.1rem; }
+      .content-box a { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .splash-screen h1 { font-size: 2rem; }
+      .splash-screen p { font-size: 1rem; }
+      .wireless-icon { width: 50px; height: 50px; }
+      .content-box {
+        margin: 80px 1rem 1rem;
+        padding: 1.5rem;
+      }
+      .content-box h1 { font-size: 1.8rem; }
+      .content-box p { font-size: 1rem; }
+      .content-box a { font-size: 1rem; padding: 0.6rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="splash-screen">
+    <div class="wireless-icon"></div>
+    <h1>Team Wireless Innovators</h1>
+    <p>
+      <span>Prepared by:</span>
+      <span>Rawand Bawatneh 1211403</span>
+      <span>Yara Darabumukho 1211269</span>
+      <span>Dana Assad 1211452</span>
+    </p>
+  </div>
+  <div class="content-box">
+    <h1>Welcome to our AI-Powered Wireless Design Tool!</h1>
+    <p>This web application helps you design and analyze wireless and mobile networks with the help of an AI agent. Explore scenarios like OFDM systems, link budget calculations, and cellular design — all with smart, easy-to-understand results.</p>
+    <p>Start designing smarter today!</p>
+    <a href="{{ url_for('operations') }}">Get Started</a>
+  </div>
+</body>
+</html>

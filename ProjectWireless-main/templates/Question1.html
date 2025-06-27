@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireless Communication System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                url('https://i.pinimg.com/736x/a2/1b/bc/a21bbcb7229e5c1e30d2537451021ade.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .NavBar {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .title_logo {
+            display: none;
+        }
+
+        .nav_links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .nav_links a {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav_links a:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .inputBoxes,
+        .AnswerBox {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            flex: 1;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        .inputBoxes:hover,
+        .AnswerBox:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input_Label {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .input_Label div[style*="flex-direction: column"] {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label1 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .label1 input[type="text"] {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .label1 .radio-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0;
+        }
+
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            color: #f0f7ff;
+            font-weight: 700;
+        }
+
+        input[type="text"] {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .radio-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            accent-color: #3b82f6;
+        }
+
+        .radio-buttons label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            font-weight: 400;
+        }
+
+        .calculateButton,
+        .resetButton {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .resetButton {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+        }
+
+        .calculateButton:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .resetButton:hover {
+            background: linear-gradient(45deg, #dc2626, #e11d48);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .AnswerBox {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .Header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .results h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.8rem;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .results ul {
+            list-style: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .results li {
+            margin-bottom: 0.5rem;
+        }
+
+        .results p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: rgb(218, 213, 213);
+            text-align: center;
+            font-weight: 400;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                max-width: 600px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .NavBar {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .nav_links a {
+                font-size: 1.1rem;
+                padding: 0.6rem 1rem;
+                min-width: 80px;
+            }
+
+            .container {
+                margin-top: 80px;
+                padding: 1.5rem;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.5rem;
+            }
+
+            .Header h1 {
+                font-size: 1.8rem;
+            }
+
+            .results h2 {
+                font-size: 1.6rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .radio-buttons label {
+                font-size: 1rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1.1rem;
+            }
+
+            .label1 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .label1 input[type="text"] {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .NavBar {
+                padding: 0.6rem 1rem;
+            }
+
+            .nav_links {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav_links a {
+                font-size: 1rem;
+                padding: 0.5rem 0.8rem;
+                min-width: 70px;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.2rem;
+            }
+
+            .Header h1 {
+                font-size: 1.6rem;
+            }
+
+            .results h2 {
+                font-size: 1.4rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 1.1rem;
+            }
+
+            .radio-buttons label {
+                font-size: 0.9rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="NavBar">
+        <div class="title_logo"></div>
+        <div class="nav_links">
+            <a href="{{ url_for('operations') }}">Home</a>
+            <a href="{{ url_for('question1') }}">Wireless Communication System</a>
+            <a href="{{ url_for('question2') }}">OFDM Systems</a>
+            <a href="{{ url_for('question3') }}">Link Budget Calculation</a>
+            <a href="{{ url_for('question4') }}">Cellular System Design</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="inputBoxes">
+            <form class="input_Label" action="{{ url_for('question1') }}" method="post" id="wirelessForm">
+                <div class="label1">
+                    <label for="signal_bandwidth">Signal Bandwidth:</label>
+                    <input type="text" id="signal_bandwidth" name="signal_bandwidth" required
+                        value="{{ request.form['signal_bandwidth'] if request.method == 'POST' else '' }}"
+                        pattern="^\s*\d*\.?\d+\s*$">
+                    <div class="radio-buttons">
+                        <input type="radio" id="signal_bandwidth_khz" name="signal_bandwidth_unit" value="kHz" {% if
+                            request.form.get('signal_bandwidth_unit')=='kHz' %}checked{% endif %} required>
+                        <label for="signal_bandwidth_khz">kHz</label>
+                        <input type="radio" id="signal_bandwidth_hz" name="signal_bandwidth_unit" value="Hz" {% if
+                            request.form.get('signal_bandwidth_unit')=='Hz' %}checked{% endif %}>
+                        <label for="signal_bandwidth_hz">Hz</label>
+                    </div>
+                </div>
+                <div class="label3">
+                    <label for="number_of_quantizer_bits">Number of Quantizer Bits:</label>
+                    <input type="text" id="number_of_quantizer_bits" name="number_of_quantizer_bits" required
+                        value="{{ request.form['number_of_quantizer_bits'] if request.method == 'POST' else '' }}"
+                        pattern="^\s*[1-9]\d*\s*$">
+                </div>
+                <div class="label4">
+                    <label for="source_encoder_compression_rate">Source Encoder Compression Rate:</label>
+                    <input type="text" id="source_encoder_compression_rate" name="source_encoder_compression_rate"
+                        required
+                        value="{{ request.form['source_encoder_compression_rate'] if request.method == 'POST' else '' }}"
+                        pattern="^\s*\d*\.?\d+\s*$">
+                </div>
+                <div class="label5">
+                    <label for="channel_encoder_rate">Channel Encoder Rate:</label>
+                    <input type="text" id="channel_encoder_rate" name="channel_encoder_rate" required
+                        value="{{ request.form['channel_encoder_rate'] if request.method == 'POST' else '' }}"
+                        pattern="^\s*\d*\.?\d+\s*$">
+                </div>
+                
+                <div class="label7">
+                    <label for="voice_segment">Voice Segment (ms):</label>
+                    <input type="text" id="voice_segment" name="voice_segment" required
+                        value="{{ request.form['voice_segment'] if request.method == 'POST' else '' }}"
+                        pattern="^\s*[1-9]\d*\s*$">
+                </div>
+                <button class="calculateButton" type="submit">Calculate</button>
+                <button class="resetButton" type="button" onclick="resetForm()">Reset</button>
+            </form>
+        </div>
+        <div class="AnswerBox">
+            <div class="Header">
+                <h1>Results Box</h1>
+            </div>
+            <div class="results">
+                {% if results %}
+                <h2>Results</h2>
+                <ul>
+                    {% for key, value in results.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if explanation %}
+                <h2>AI Explanation</h2>
+                <p>{{ explanation }}</p>
+                {% elif error %}
+                <p>{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Reset all form inputs and radio buttons to default
+        function resetForm() {
+            const form = document.getElementById('wirelessForm');
+            const textInputs = form.querySelectorAll('input[type="text"]');
+            const radioInputs = form.querySelectorAll('input[type="radio"]');
+            textInputs.forEach(input => {
+                input.value = ''; // Clear all text inputs
+            });
+            radioInputs.forEach(input => {
+                input.checked = false; // Uncheck all radio buttons
+            });
+        }
+    </script>
+</body>
+
+</html>

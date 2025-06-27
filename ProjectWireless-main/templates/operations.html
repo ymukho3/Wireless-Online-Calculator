@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operation Menu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                        url('https://i.pinimg.com/736x/44/63/61/446361d44f68d767d18de51eabb85cd2.jpg')
+                        no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .NavBar {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        .title_logo {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .NavBar h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f0f8ff, #add8e6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(173, 216, 230, 0.6);
+            letter-spacing: 1.5px;
+            animation: titleFadeIn 1s ease-out;
+            transition: transform 0.4s ease, filter 0.4s ease;
+        }
+
+        .NavBar h1:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        @keyframes titleFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .operations {
+            margin-top: 120px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .operation1, .operation2, .operation3, .operation4 {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            max-width: 350px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .operation1:hover, .operation2:hover, .operation3:hover, .operation4:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .operation1_Img, .operation4_Img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            margin: 0 auto;
+        }
+
+        .operationDiv {
+            padding: 1.5rem;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .label_button {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .operation1Par {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f0f7ff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .OperationButtonCard {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-decoration: none;
+        }
+
+        .OperationButtonCard:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .NavBar h1 { font-size: 1.8rem; }
+            .operations {
+                margin-top: 100px;
+                padding: 1.5rem;
+            }
+            .operation1, .operation2, .operation3, .operation4 {
+                max-width: 100%;
+                margin: 0 1rem;
+            }
+            .operation1_Img, .operation4_Img { height: 120px; width: 120px; }
+            .operation1Par { font-size: 1.6rem; }
+            .OperationButtonCard { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .NavBar h1 { font-size: 1.6rem; }
+            .operations {
+                margin-top: 80px;
+                padding: 1rem;
+            }
+            .operation1_Img, .operation4_Img { height: 120px; width: 120px; }
+            .operation1Par { font-size: 1.4rem; }
+            .OperationButtonCard { font-size: 1rem; padding: 0.6rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="NavBar">
+        <div class="title_logo">
+            <h1>Operation Menu</h1>
+        </div>
+    </div>
+    <div class="operations">
+        <div class="operation1">
+            <img alt="Wireless Communication System" class="operation1_Img" src="../static/images/Wireless.gif">
+            <div class="operationDiv">
+                <div class="label_button">
+                    <p class="operation1Par"><strong>Wireless Communication System</strong></p>
+                    <a href="{{ url_for('question1') }}">
+                        <button class="OperationButtonCard">Calculate</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="operation2">
+            <img alt="OFDM Systems" class="operation1_Img" src="../static/images/OFDM.gif">
+            <div class="operationDiv">
+                <div class="label_button">
+                    <p class="operation1Par"><strong>OFDM Systems</strong></p>
+                    <a href="{{ url_for('question2') }}">
+                        <button class="OperationButtonCard">Calculate</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="operation3">
+            <img alt="Link Budget Calculation" class="operation1_Img" src="../static/images/LinkBudgt.gif">
+            <div class="operationDiv">
+                <div class="label_button">
+                    <p class="operation1Par"><strong>Link Budget Calculation</strong></p>
+                    <a href="{{ url_for('question3') }}">
+                        <button class="OperationButtonCard">Calculate</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="operation4">
+            <img alt="Cellular System Design" class="operation4_Img" src="../static/images/Cellular.gif">
+            <div class="operationDiv">
+                <div class="label_button">
+                    <p class="operation1Par"><strong>Cellular System Design</strong></p>
+                    <a href="{{ url_for('question4') }}">
+                        <button class="OperationButtonCard">Calculate</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

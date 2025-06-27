@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assess Multiple Access Throughput</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                url('https://i.pinimg.com/736x/a2/1b/bc/a21bbcb7229e5c1e30d2537451021ade.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .NavBar {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .title_logo {
+            display: none;
+        }
+
+        .nav_links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .nav_links a {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav_links a:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .inputBoxes,
+        .AnswerBox {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            flex: 1;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        .inputBoxes:hover,
+        .AnswerBox:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input_Label {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .input_Label div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label1,
+        .label2,
+        .label3,
+        .label4,
+        .label5,
+        .label6,
+        .label7,
+        .label8,
+        .label9,
+        .label10,
+        .label11 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .label1 input[type="text"],
+        .label2 input[type="text"],
+        .label3 input[type="text"],
+        .label4 input[type="text"],
+        .label5 input[type="text"],
+        .label6 input[type="text"],
+        .label7 input[type="text"],
+        .label8 input[type="text"],
+        .label9 input[type="text"],
+        .label10 select,
+        .label11 input[type="text"] {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .label1 select,
+        .label3 select,
+        .label4 select,
+        .label5 select,
+        .label6 select,
+        .label7 select,
+        .label9 select,
+        .label10 select {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .label1 select:focus,
+        .label3 select:focus,
+        .label4 select:focus,
+        .label5 select:focus,
+        .label6 select:focus,
+        .label7 select:focus,
+        .label9 select:focus,
+        .label10 select:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            color: #f0f7ff;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        select:invalid {
+            color: #aaa;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .calculateButton,
+        .resetButton {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .resetButton {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+        }
+
+        .calculateButton:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .resetButton:hover {
+            background: linear-gradient(45deg, #dc2626, #e11d48);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .AnswerBox {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .Header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .results h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.8rem;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .results ul {
+            list-style: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .results li {
+            margin-bottom: 0.5rem;
+        }
+
+        .results p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: rgb(247, 245, 245);
+            text-align: center;
+            font-weight: 400;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                max-width: 600px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .NavBar {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .nav_links a {
+                font-size: 1.1rem;
+                padding: 0.6rem 1rem;
+                min-width: 80px;
+            }
+
+            .container {
+                margin-top: 80px;
+                padding: 1.5rem;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.5rem;
+            }
+
+            .Header h1 {
+                font-size: 1.8rem;
+            }
+
+            .results h2 {
+                font-size: 1.6rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1.1rem;
+            }
+
+            .label1,
+            .label2,
+            .label3,
+            .label4,
+            .label5,
+            .label6,
+            .label7,
+            .label8,
+            .label9,
+            .label10,
+            .label11 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .label1 input[type="text"],
+            .label2 input[type="text"],
+            .label3 input[type="text"],
+            .label4 input[type="text"],
+            .label5 input[type="text"],
+            .label6 input[type="text"],
+            .label7 input[type="text"],
+            .label8 input[type="text"],
+            .label9 input[type="text"],
+            .label10 select,
+            .label11 input[type="text"] {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .NavBar {
+                padding: 0.6rem 1rem;
+            }
+
+            .nav_links {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav_links a {
+                font-size: 1rem;
+                padding: 0.5rem 0.8rem;
+                min-width: 70px;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.2rem;
+            }
+
+            .Header h1 {
+                font-size: 1.6rem;
+            }
+
+            .results h2 {
+                font-size: 1.4rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 1.1rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="NavBar">
+        <div class="title_logo"></div>
+        <div class="nav_links">
+            <a href="{{ url_for('operations') }}">Home</a>
+            <a href="{{ url_for('question1') }}">Wireless Communication System</a>
+            <a href="{{ url_for('question2') }}">OFDM Systems</a>
+            <a href="{{ url_for('question3') }}">Link Budget Calculation</a>
+            <a href="{{ url_for('question4') }}">Cellular System Design</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="inputBoxes">
+            <form class="input_Label" action="{{ url_for('question4') }}" method="post" id="throughputForm">
+                <div class="label1">
+                    <label for="area">Area:</label>
+                    <input type="text" id="area" name="area" value="{{ request.form.get('area', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="area_unit" id="area_unit" required>
+                        <option value="" disabled {% if not request.form.get('area_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="km2" {% if request.form.get('area_unit')=='km2' %}selected{% endif %}>km²
+                        </option>
+                        <option value="m2" {% if request.form.get('area_unit')=='m2' %}selected{% endif %}>m²</option>
+                    </select>
+                </div>
+                <div class="label2">
+                    <label for="subscribers">Number of Subscribers:</label>
+                    <input type="text" id="subscribers" name="subscribers"
+                        value="{{ request.form.get('subscribers', '') }}" pattern="^\s*\d+\s*$" required>
+                </div>
+                <div class="label3">
+                    <label for="calls_per_day">Calls per Time:</label>
+                    <input type="text" id="calls_per_day" name="calls_per_day"
+                        value="{{ request.form.get('calls_per_day', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="calls_per_day_unit" id="calls_per_day_unit" required>
+                        <option value="" disabled {% if not request.form.get('calls_per_day_unit') %}selected{% endif
+                            %}>Select time unit</option>
+                        <option value="day" {% if request.form.get('calls_per_day_unit')=='day' %}selected{% endif %}>
+                            per day</option>
+                        <option value="hour" {% if request.form.get('calls_per_day_unit')=='hour' %}selected{% endif %}>
+                            per hour</option>
+                        <option value="minute" {% if request.form.get('calls_per_day_unit')=='minute' %}selected{% endif
+                            %}>per minute</option>
+                        <option value="second" {% if request.form.get('calls_per_day_unit')=='second' %}selected{% endif
+                            %}>per second</option>
+                    </select>
+                </div>
+                <div class="label4">
+                    <label for="call_duration">Call Duration:</label>
+                    <input type="text" id="call_duration" name="call_duration"
+                        value="{{ request.form.get('call_duration', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="call_duration_unit" id="call_duration_unit" required>
+                        <option value="" disabled {% if not request.form.get('call_duration_unit') %}selected{% endif
+                            %}>Select time unit</option>
+                        <option value="day" {% if request.form.get('call_duration_unit')=='day' %}selected{% endif %}>
+                            days</option>
+                        <option value="hour" {% if request.form.get('call_duration_unit')=='hour' %}selected{% endif %}>
+                            hours</option>
+                        <option value="minute" {% if request.form.get('call_duration_unit')=='minute' %}selected{% endif
+                            %}>minutes</option>
+                        <option value="second" {% if request.form.get('call_duration_unit')=='second' %}selected{% endif
+                            %}>seconds</option>
+                    </select>
+                </div>
+                <div class="label5">
+                    <label for="sir">SIR:</label>
+                    <input type="text" id="sir" name="sir" value="{{ request.form.get('sir', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="sir_unit" id="sir_unit" required>
+                        <option value="" disabled {% if not request.form.get('sir_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('sir_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('sir_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label6">
+                    <label for="power_reference">Reference Power:</label>
+                    <input type="text" id="power_reference" name="power_reference"
+                        value="{{ request.form.get('power_reference', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="power_reference_unit" id="power_reference_unit" required>
+                        <option value="" disabled {% if not request.form.get('power_reference_unit') %}selected{% endif
+                            %}>Select unit</option>
+                        <option value="dB" {% if request.form.get('power_reference_unit')=='dB' %}selected{% endif %}>dB
+                        </option>
+                        <option value="watt" {% if request.form.get('power_reference_unit')=='watt' %}selected{% endif
+                            %}>Watt</option>
+                        <option value="microwatt" {% if request.form.get('power_reference_unit')=='microwatt'
+                            %}selected{% endif %}>Microwatt</option>
+                    </select>
+                </div>
+                <div class="label7">
+                    <label for="distance_reference">Reference Distance:</label>
+                    <input type="text" id="distance_reference" name="distance_reference"
+                        value="{{ request.form.get('distance_reference', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="distance_reference_unit" id="distance_reference_unit" required>
+                        <option value="" disabled {% if not request.form.get('distance_reference_unit') %}selected{%
+                            endif %}>Select unit</option>
+                        <option value="km" {% if request.form.get('distance_reference_unit')=='km' %}selected{% endif
+                            %}>km</option>
+                        <option value="m" {% if request.form.get('distance_reference_unit')=='m' %}selected{% endif %}>m
+                        </option>
+                    </select>
+                </div>
+                <div class="label8">
+                    <label for="path_loss_exponent">Path Loss Exponent:</label>
+                    <input type="text" id="path_loss_exponent" name="path_loss_exponent"
+                        value="{{ request.form.get('path_loss_exponent', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                </div>
+                <div class="label9">
+                    <label for="receiver_sensitivity">Receiver Sensitivity:</label>
+                    <input type="text" id="receiver_sensitivity" name="receiver_sensitivity"
+                        value="{{ request.form.get('receiver_sensitivity', '') }}" pattern="^\s*-?\d*\.?\d+\s*$"
+                        required>
+                    <select name="receiver_sensitivity_unit" id="receiver_sensitivity_unit" required>
+                        <option value="" disabled {% if not request.form.get('receiver_sensitivity_unit') %}selected{%
+                            endif %}>Select unit</option>
+                        <option value="dB" {% if request.form.get('receiver_sensitivity_unit')=='dB' %}selected{% endif
+                            %}>dB</option>
+                        <option value="watt" {% if request.form.get('receiver_sensitivity_unit')=='watt' %}selected{%
+                            endif %}>Watt</option>
+                        <option value="microwatt" {% if request.form.get('receiver_sensitivity_unit')=='microwatt'
+                            %}selected{% endif %}>Microwatt</option>
+                    </select>
+                </div>
+                <div class="label10">
+                    <label for="gos">Grade of Service (% probability):</label>
+                    <select name="gos" id="gos" required>
+                        <option value="" disabled {% if not request.form.get('gos') %}selected{% endif %}>Select GoS
+                        </option>
+                        <option value="0.001" {% if request.form.get('gos')=='0.001' %}selected{% endif %}>0.1%</option>
+                        <option value="0.002" {% if request.form.get('gos')=='0.002' %}selected{% endif %}>0.2%</option>
+                        <option value="0.005" {% if request.form.get('gos')=='0.005' %}selected{% endif %}>0.5%</option>
+                        <option value="0.01" {% if request.form.get('gos')=='0.01' %}selected{% endif %}>1.0%</option>
+                        <option value="0.012" {% if request.form.get('gos')=='0.012' %}selected{% endif %}>1.2%</option>
+                        <option value="0.013" {% if request.form.get('gos')=='0.013' %}selected{% endif %}>1.3%</option>
+                        <option value="0.015" {% if request.form.get('gos')=='0.015' %}selected{% endif %}>1.5%</option>
+                        <option value="0.02" {% if request.form.get('gos')=='0.02' %}selected{% endif %}>2.0%</option>
+                        <option value="0.03" {% if request.form.get('gos')=='0.03' %}selected{% endif %}>3.0%</option>
+                        <option value="0.05" {% if request.form.get('gos')=='0.05' %}selected{% endif %}>5.0%</option>
+                        <option value="0.07" {% if request.form.get('gos')=='0.07' %}selected{% endif %}>7.0%</option>
+                        <option value="0.1" {% if request.form.get('gos')=='0.1' %}selected{% endif %}>10.0%</option>
+                        <option value="0.15" {% if request.form.get('gos')=='0.15' %}selected{% endif %}>15.0%</option>
+                        <option value="0.2" {% if request.form.get('gos')=='0.2' %}selected{% endif %}>20.0%</option>
+                        <option value="0.3" {% if request.form.get('gos')=='0.3' %}selected{% endif %}>30.0%</option>
+                    </select>
+                </div>
+                <div class="label11">
+                    <label for="timeslots_per_carrier">Timeslots per Carrier:</label>
+                    <input type="text" id="timeslots_per_carrier" name="timeslots_per_carrier"
+                        value="{{ request.form.get('timeslots_per_carrier', '') }}" pattern="^\s*\d+\s*$" required>
+                </div>
+                <button class="calculateButton" type="submit">Calculate</button>
+                <button class="resetButton" type="button" onclick="resetForm()">Reset</button>
+            </form>
+        </div>
+        <div class="AnswerBox">
+            <div class="Header">
+                <h1>Results Box</h1>
+            </div>
+            <div class="results">
+                {% if results %}
+                <h2>Results</h2>
+                <ul>
+                    {% for key, value in results.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% if explanation %}
+                <div class="ai-explanation">
+                    <h3>AI Explanation:</h3>
+                    <p>{{ explanation }}</p>
+                </div>
+                {% endif %}
+                {% elif error %}
+                <p>{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Reset all select elements to their default (blank) option on page load if no form data
+        document.addEventListener('DOMContentLoaded', () => {
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                if (!select.value) {
+                    select.value = ''; // Ensure blank option is selected if no form data
+                }
+            });
+        });
+
+        // Reset select to blank on focus (reselect), if it has a valid selection
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('focus', () => {
+                if (select.value !== '') {
+                    select.value = ''; // Reset to blank option when user focuses to reselect
+                }
+            });
+        });
+
+        // Reset all form inputs and selects
+        function resetForm() {
+            const form = document.getElementById('throughputForm');
+            const inputs = form.querySelectorAll('input[type="text"]');
+            const selects = form.querySelectorAll('select');
+            inputs.forEach(input => {
+                input.value = ''; // Clear all text inputs
+            });
+            selects.forEach(select => {
+                select.value = ''; // Reset all selects to blank option
+            });
+        }
+    </script>
+</body>
+
+</html>

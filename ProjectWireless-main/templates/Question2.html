@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze OFDMA Transmission Parameters</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                url('https://i.pinimg.com/736x/a2/1b/bc/a21bbcb7229e5c1e30d2537451021ade.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .NavBar {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .title_logo {
+            display: none;
+        }
+
+        .nav_links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .nav_links a {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav_links a:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .inputBoxes,
+        .AnswerBox {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            flex: 1;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        .inputBoxes:hover,
+        .AnswerBox:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input_Label {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .label1,
+        .label2,
+        .label3,
+        .label4,
+        .label5,
+        .label6 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .label1 input[type="text"],
+        .label2 input[type="text"],
+        .label3 input[type="text"],
+        .label4 input[type="text"],
+        .label5 input[type="text"],
+        .label6 input[type="text"] {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .label1 .radio-buttons,
+        .label2 .radio-buttons,
+        .label4 .radio-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            color: #f0f7ff;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .radio-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        input[type="radio"] {
+            accent-color: #3b82f6;
+        }
+
+        .radio-buttons label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.1rem;
+            color: #f0f0f0;
+            font-weight: 400;
+        }
+
+        .calculateButton,
+        .resetButton {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .resetButton {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+        }
+
+        .calculateButton:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .resetButton:hover {
+            background: linear-gradient(45deg, #dc2626, #e11d48);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .AnswerBox {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .Header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .results h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.8rem;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .results ul {
+            list-style: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .results li {
+            margin-bottom: 0.5rem;
+        }
+
+        .results p {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: rgb(236, 234, 234);
+            text-align: center;
+            font-weight: 400;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                max-width: 600px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .NavBar {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .nav_links a {
+                font-size: 1.1rem;
+                padding: 0.6rem 1rem;
+                min-width: 80px;
+            }
+
+            .container {
+                margin-top: 80px;
+                padding: 1.5rem;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.5rem;
+            }
+
+            .Header h1 {
+                font-size: 1.8rem;
+            }
+
+            .results h2 {
+                font-size: 1.6rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .radio-buttons label {
+                font-size: 1rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1.1rem;
+            }
+
+            .label1,
+            .label2,
+            .label3,
+            .label4,
+            .label5,
+            .label6 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .label1 input[type="text"],
+            .label2 input[type="text"],
+            .label3 input[type="text"],
+            .label4 input[type="text"],
+            .label5 input[type="text"],
+            .label6 input[type="text"] {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .NavBar {
+                padding: 0.6rem 1rem;
+            }
+
+            .nav_links {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav_links a {
+                font-size: 1rem;
+                padding: 0.5rem 0.8rem;
+                min-width: 70px;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.2rem;
+            }
+
+            .Header h1 {
+                font-size: 1.6rem;
+            }
+
+            .results h2 {
+                font-size: 1.4rem;
+            }
+
+            .results ul,
+            .results p {
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 1.1rem;
+            }
+
+            .radio-buttons label {
+                font-size: 0.9rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="NavBar">
+        <div class="title_logo"></div>
+        <div class="nav_links">
+            <a href="{{ url_for('operations') }}">Home</a>
+            <a href="{{ url_for('question1') }}">Wireless Communication System</a>
+            <a href="{{ url_for('question2') }}">OFDM Systems</a>
+            <a href="{{ url_for('question3') }}">Link Budget Calculation</a>
+            <a href="{{ url_for('question4') }}">Cellular System Design</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="inputBoxes">
+            <form class="input_Label" action="{{ url_for('question2') }}" method="post" id="ofdmForm">
+                <div class="label1">
+                    <label for="bandwidth_rb">Bandwidth of Each Resource Block:</label>
+                    <input type="text" id="bandwidth_rb" name="bandwidth_rb"
+                        value="{{ request.form.get('bandwidth_rb', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <div class="radio-buttons">
+                        <input type="radio" id="bandwidth_rb_khz" name="bandwidth_rb_unit" value="kHz" {% if
+                            request.form.get('bandwidth_rb_unit')=='kHz' %}checked{% endif %} required>
+                        <label for="bandwidth_rb_khz">kHz</label>
+                        <input type="radio" id="bandwidth_rb_hz" name="bandwidth_rb_unit" value="Hz" {% if
+                            request.form.get('bandwidth_rb_unit')=='Hz' %}checked{% endif %}>
+                        <label for="bandwidth_rb_hz">Hz</label>
+                    </div>
+                </div>
+                <div class="label2">
+                    <label for="subcarrier_spacing">Subcarrier Spacing:</label>
+                    <input type="text" id="subcarrier_spacing" name="subcarrier_spacing"
+                        value="{{ request.form.get('subcarrier_spacing', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <div class="radio-buttons">
+                        <input type="radio" id="subcarrier_spacing_khz" name="subcarrier_spacing_unit" value="kHz" {% if
+                            request.form.get('subcarrier_spacing_unit')=='kHz' %}checked{% endif %} required>
+                        <label for="subcarrier_spacing_khz">kHz</label>
+                        <input type="radio" id="subcarrier_spacing_hz" name="subcarrier_spacing_unit" value="Hz" {% if
+                            request.form.get('subcarrier_spacing_unit')=='Hz' %}checked{% endif %}>
+                        <label for="subcarrier_spacing_hz">Hz</label>
+                    </div>
+                </div>
+                <div class="label3">
+                    <label for="num_ofdm_symbols">Number of OFDM Symbols per Resource Block:</label>
+                    <input type="text" id="num_ofdm_symbols" name="num_ofdm_symbols"
+                        value="{{ request.form.get('num_ofdm_symbols', '') }}" pattern="^\s*[1-9]\d*\s*$" required>
+                </div>
+                <div class="label4">
+                    <label for="duration_rb">Duration of Each Resource Block:</label>
+                    <input type="text" id="duration_rb" name="duration_rb"
+                        value="{{ request.form.get('duration_rb', '') }}" pattern="^\s*\d*\.?\d+\s*$" required>
+                    <div class="radio-buttons">
+                        <input type="radio" id="milliseconds" name="duration_rb_unit" value="milliseconds" {% if
+                            request.form.get('duration_rb_unit')=='milliseconds' %}checked{% endif %} required>
+                        <label for="milliseconds">msec</label>
+                        <input type="radio" id="seconds" name="duration_rb_unit" value="seconds" {% if
+                            request.form.get('duration_rb_unit')=='seconds' %}checked{% endif %}>
+                        <label for="seconds">sec</label>
+                    </div>
+                </div>
+                <div class="label5">
+                    <label for="modulation_order">Modulation Order (e.g., 2, 4, 16, 64 for QAM):</label>
+                    <input type="text" id="modulation_order" name="modulation_order"
+                        value="{{ request.form.get('modulation_order', '') }}" pattern="^\s*[1-9]\d*\s*$" required
+                        oninput="validateModulationOrder(this)">
+                </div>
+                <div class="label6">
+                    <label for="num_parallel_rb">Number of Parallel Resource Blocks:</label>
+                    <input type="text" id="num_parallel_rb" name="num_parallel_rb"
+                        value="{{ request.form.get('num_parallel_rb', '') }}" pattern="^\s*[1-9]\d*\s*$" required>
+                </div>
+                <button class="calculateButton" type="submit">Calculate</button>
+                <button class="resetButton" type="button" onclick="resetForm()">Reset</button>
+            </form>
+        </div>
+        <div class="AnswerBox">
+            <div class="Header">
+                <h1>Results Box</h1>
+            </div>
+            <div class="results">
+                {% if results %}
+                <h2>Results</h2>
+                <ul>
+                    {% for key, value in results.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% if explanation %}
+                <div style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 10px;">
+                    <h3>AI Explanation:</h3>
+                    <p>{{ explanation }}</p>
+                </div>
+                {% endif %}
+
+                {% elif error %}
+                <p>{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Ensure radio buttons are unchecked on page load if no form data
+        document.addEventListener('DOMContentLoaded', () => {
+            const radioGroups = ['bandwidth_rb_unit', 'subcarrier_spacing_unit', 'duration_rb_unit'];
+            radioGroups.forEach(group => {
+                const radios = document.querySelectorAll(`input[name="${group}"]`);
+                if (!Array.from(radios).some(radio => radio.checked)) {
+                    radios.forEach(radio => radio.checked = false);
+                }
+            });
+        });
+
+        // Validate modulation order is a power of 2
+        function validateModulationOrder(input) {
+            const value = parseInt(input.value);
+            if (value && (value & (value - 1)) !== 0) {
+                input.setCustomValidity("Modulation order must be a power of 2 (e.g., 2, 4, 16, 64).");
+            } else {
+                input.setCustomValidity("");
+            }
+        }
+
+        // Reset all form inputs and radio buttons to default
+        function resetForm() {
+            const form = document.getElementById('ofdmForm');
+            const textInputs = form.querySelectorAll('input[type="text"]');
+            const radioInputs = form.querySelectorAll('input[type="radio"]');
+            textInputs.forEach(input => {
+                input.value = ''; // Clear all text inputs
+                if (input.id === 'modulation_order') {
+                    input.setCustomValidity(""); // Clear custom validation
+                }
+            });
+            radioInputs.forEach(input => {
+                input.checked = false; // Uncheck all radio buttons
+            });
+        }
+    </script>
+</body>
+
+</html>

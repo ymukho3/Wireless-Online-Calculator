@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transmit Power Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 50, 0.7), rgba(0, 0, 50, 0.7)),
+                url('https://i.pinimg.com/736x/a2/1b/bc/a21bbcb7229e5c1e30d2537451021ade.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .NavBar {
+            width: 100%;
+            background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .title_logo {
+            display: none;
+        }
+
+        .nav_links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .nav_links a {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: #f0f0f0;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .nav_links a:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .container {
+            margin-top: 100px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: row;
+            gap: 2rem;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .inputBoxes,
+        .AnswerBox {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInUp 0.8s ease-out;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            flex: 1;
+            max-width: 500px;
+            min-width: 300px;
+        }
+
+        .inputBoxes:hover,
+        .AnswerBox:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input_Label {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .input_Label div {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label1,
+        .label2,
+        .label3,
+        .label4,
+        .label5,
+        .label6,
+        .label7,
+        .label8,
+        .label9,
+        .label10,
+        .label11,
+        .label12,
+        .label13,
+        .label14 {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .label1 input[type="text"],
+        .label2 input[type="text"],
+        .label3 input[type="text"],
+        .label4 input[type="text"],
+        .label5 input[type="text"],
+        .label6 input[type="text"],
+        .label7 input[type="text"],
+        .label8 input[type="text"],
+        .label9 input[type="text"],
+        .label10 input[type="text"],
+        .label11 input[type="text"],
+        .label12 input[type="text"],
+        .label13 select,
+        .label14 select {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .label1 select,
+        .label2 select,
+        .label3 select,
+        .label4 select,
+        .label5 select,
+        .label6 select,
+        .label7 select,
+        .label8 select,
+        .label9 select,
+        .label10 select,
+        .label12 select,
+        .label13 select,
+        .label14 select {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, background 0.3s ease;
+        }
+
+        .label1 select:focus,
+        .label2 select:focus,
+        .label3 select:focus,
+        .label4 select:focus,
+        .label5 select:focus,
+        .label6 select:focus,
+        .label7 select:focus,
+        .label8 select:focus,
+        .label9 select:focus,
+        .label10 select:focus,
+        .label12 select:focus,
+        .label13 select:focus,
+        .label14 select:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        label {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.3rem;
+            color: #f0f7ff;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select {
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease, background 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        select:invalid {
+            color: #aaa;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #87ceeb;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        input[type="text"]::placeholder {
+            color: #999;
+        }
+
+        .calculateButton,
+        .resetButton {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #3b82f6, #87ceeb);
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .resetButton {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+        }
+
+        .calculateButton:hover {
+            background: linear-gradient(45deg, #2563eb, #6ab7d5);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .resetButton:hover {
+            background: linear-gradient(45deg, #dc2626, #e11d48);
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .AnswerBox {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .Header h1 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .results h2 {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.8rem;
+            color: #f0f7ff;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .results ul {
+            list-style: none;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #f0f0f0;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .results li {
+            margin-bottom: 0.5rem;
+        }
+
+        .results .error {
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid red;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 400;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                max-width: 600px;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .NavBar {
+                padding: 0.8rem 1.5rem;
+            }
+
+            .nav_links a {
+                font-size: 1.1rem;
+                padding: 0.6rem 1rem;
+                min-width: 80px;
+            }
+
+            .container {
+                margin-top: 80px;
+                padding: 1.5rem;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.5rem;
+            }
+
+            .Header h1 {
+                font-size: 1.8rem;
+            }
+
+            .results h2 {
+                font-size: 1.6rem;
+            }
+
+            .results ul,
+            .results .error {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 1.2rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1.1rem;
+            }
+
+            .label1,
+            .label2,
+            .label3,
+            .label4,
+            .label5,
+            .label6,
+            .label7,
+            .label8,
+            .label9,
+            .label10,
+            .label11,
+            .label12,
+            .label13,
+            .label14 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .label1 input[type="text"],
+            .label2 input[type="text"],
+            .label3 input[type="text"],
+            .label4 input[type="text"],
+            .label5 input[type="text"],
+            .label6 input[type="text"],
+            .label7 input[type="text"],
+            .label8 input[type="text"],
+            .label9 input[type="text"],
+            .label10 input[type="text"],
+            .label11 input[type="text"],
+            .label12 input[type="text"],
+            .label13 select,
+            .label14 select {
+                min-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .NavBar {
+                padding: 0.6rem 1rem;
+            }
+
+            .nav_links {
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav_links a {
+                font-size: 1rem;
+                padding: 0.5rem 0.8rem;
+                min-width: 70px;
+            }
+
+            .inputBoxes,
+            .AnswerBox {
+                padding: 1.2rem;
+            }
+
+            .Header h1 {
+                font-size: 1.6rem;
+            }
+
+            .results h2 {
+                font-size: 1.4rem;
+            }
+
+            .results ul,
+            .results .error {
+                font-size: 1rem;
+            }
+
+            label {
+                font-size: 1.1rem;
+            }
+
+            .calculateButton,
+            .resetButton {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="NavBar">
+        <div class="title_logo"></div>
+        <div class="nav_links">
+            <a href="{{ url_for('operations') }}">Home</a>
+            <a href="{{ url_for('question1') }}">Wireless Communication System</a>
+            <a href="{{ url_for('question2') }}">OFDM Systems</a>
+            <a href="{{ url_for('question3') }}">Link Budget Calculation</a>
+            <a href="{{ url_for('question4') }}">Cellular System Design</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="inputBoxes">
+            <form class="input_Label" action="{{ url_for('question3') }}" method="post" id="transmitPowerForm">
+                <div class="label1">
+                    <label for="L_p">Path Loss (L_p):</label>
+                    <input type="text" id="L_p" name="L_p" value="{{ request.form.get('L_p', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="L_p_unit" id="L_p_unit" required>
+                        <option value="" disabled {% if not request.form.get('L_p_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('L_p_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('L_p_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label2">
+                    <label for="G_t">Transmit Antenna Gain (G_t):</label>
+                    <input type="text" id="G_t" name="G_t" value="{{ request.form.get('G_t', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="G_t_unit" id="G_t_unit" required>
+                        <option value="" disabled {% if not request.form.get('G_t_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('G_t_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('G_t_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label3">
+                    <label for="G_r">Receive Antenna Gain (G_r):</label>
+                    <input type="text" id="G_r" name="G_r" value="{{ request.form.get('G_r', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="G_r_unit" id="G_r_unit" required>
+                        <option value="" disabled {% if not request.form.get('G_r_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('G_r_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('G_r_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label4">
+                    <label for="R">Data Rate (R):</label>
+                    <input type="text" id="R" name="R" value="{{ request.form.get('R', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select id="R_unit" name="R_unit" required>
+                        <option value="" disabled {% if not request.form.get('R_unit') %}selected{% endif %}>Select unit
+                        </option>
+                        <option value="bps" {% if request.form.get('R_unit')=='bps' %}selected{% endif %}>bps</option>
+                        <option value="kbps" {% if request.form.get('R_unit')=='kbps' %}selected{% endif %}>kbps
+                        </option>
+                        <option value="Mbps" {% if request.form.get('R_unit')=='Mbps' %}selected{% endif %}>Mbps
+                        </option>
+                    </select>
+                </div>
+                <div class="label5">
+                    <label for="L_o">Feed Line Loss (L_o):</label>
+                    <input type="text" id="L_o" name="L_o" value="{{ request.form.get('L_o', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="L_o_unit" id="L_o_unit" required>
+                        <option value="" disabled {% if not request.form.get('L_o_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('L_o_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('L_o_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label6">
+                    <label for="L_f">Other Losses (L_f):</label>
+                    <input type="text" id="L_f" name="L_f" value="{{ request.form.get('L_f', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="L_f_unit" id="L_f_unit" required>
+                        <option value="" disabled {% if not request.form.get('L_f_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('L_f_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('L_f_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label7">
+                    <label for="F_margin">Fade Margin (F_margin):</label>
+                    <input type="text" id="F_margin" name="F_margin" value="{{ request.form.get('F_margin', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="F_margin_unit" id="F_margin_unit" required>
+                        <option value="" disabled {% if not request.form.get('F_margin_unit') %}selected{% endif %}>
+                            Select unit</option>
+                        <option value="dB" {% if request.form.get('F_margin_unit')=='dB' %}selected{% endif %}>dB
+                        </option>
+                        <option value="watt" {% if request.form.get('F_margin_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label8">
+                    <label for="A_t">Transmitter Amplifier Gain (A_t):</label>
+                    <input type="text" id="A_t" name="A_t" value="{{ request.form.get('A_t', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="A_t_unit" id="A_t_unit" required>
+                        <option value="" disabled {% if not request.form.get('L_p_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('A_t_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('A_t_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label9">
+                    <label for="A_r">Receiver Amplifier Gain (A_r):</label>
+                    <input type="text" id="A_r" name="A_r" value="{{ request.form.get('A_r', '') }}"
+                        pattern="^\s*-?\d*\.?\d+\s*$" required>
+                    <select name="A_r_unit" id="A_r_unit" required>
+                        <option value="" disabled {% if not request.form.get('A_r_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('A_r_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('A_r_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label10">
+                    <label for="N_f">Noise Figure Total (N_f):</label>
+                    <input type="text" id="N_f" name="N_f" value="{{ request.form.get('N_f', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="N_f_unit" id="N_f_unit" required>
+                        <option value="" disabled {% if not request.form.get('N_f_unit') %}selected{% endif %}>Select
+                            unit</option>
+                        <option value="dB" {% if request.form.get('N_f_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('N_f_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label11">
+                    <label for="T">Noise Temperature (T, Kelvin):</label>
+                    <input type="text" id="T" name="T" value="{{ request.form.get('T', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                </div>
+                <div class="label12">
+                    <label for="M">Link Margin (M):</label>
+                    <input type="text" id="M" name="M" value="{{ request.form.get('M', '') }}"
+                        pattern="^\s*\d*\.?\d+\s*$" required>
+                    <select name="M_unit" id="M_unit" required>
+                        <option value="" disabled {% if not request.form.get('M_unit') %}selected{% endif %}>Select unit
+                        </option>
+                        <option value="dB" {% if request.form.get('M_unit')=='dB' %}selected{% endif %}>dB</option>
+                        <option value="watt" {% if request.form.get('M_unit')=='watt' %}selected{% endif %}>Watt
+                        </option>
+                    </select>
+                </div>
+                <div class="label13">
+                    <label for="modulation_type">Type of Modulation:</label>
+                    <select id="modulation_type" name="modulation_type" required>
+                        <option value="" disabled {% if not request.form.get('modulation_type') %}selected{% endif %}>
+                            Select modulation</option>
+                        <option value="BPSK/QPSK" {% if request.form.get('modulation_type')=='BPSK/QPSK' %}selected{%
+                            endif %}>BPSK/QPSK</option>
+                        <option value="8-PSK" {% if request.form.get('modulation_type')=='8-PSK' %}selected{% endif %}>
+                            8-PSK</option>
+                        <option value="16-PSK" {% if request.form.get('modulation_type')=='16-PSK' %}selected{% endif
+                            %}>16-PSK</option>
+                    </select>
+                </div>
+                <div class="label14">
+                    <label for="ber">Maximum Bit Error Rate (BER):</label>
+                    <select id="ber" name="ber" required>
+                        <option value="" disabled {% if not request.form.get('ber') %}selected{% endif %}>Select BER
+                        </option>
+                        <option value="1e-1" {% if request.form.get('ber')=='1e-1' %}selected{% endif %}>10^-1</option>
+                        <option value="1e-2" {% if request.form.get('ber')=='1e-2' %}selected{% endif %}>10^-2</option>
+                        <option value="1e-3" {% if request.form.get('ber')=='1e-3' %}selected{% endif %}>10^-3</option>
+                        <option value="1e-4" {% if request.form.get('ber')=='1e-4' %}selected{% endif %}>10^-4</option>
+                        <option value="1e-5" {% if request.form.get('ber')=='1e-5' %}selected{% endif %}>10^-5</option>
+                        <option value="1e-6" {% if request.form.get('ber')=='1e-6' %}selected{% endif %}>10^-6</option>
+                        <option value="1e-7" {% if request.form.get('ber')=='1e-7' %}selected{% endif %}>10^-7</option>
+                        <option value="1e-8" {% if request.form.get('ber')=='1e-8' %}selected{% endif %}>10^-8</option>
+                    </select>
+                </div>
+                <button class="calculateButton" type="submit">Calculate</button>
+                <button class="resetButton" type="button" onclick="resetForm()">Reset</button>
+            </form>
+        </div>
+        <div class="AnswerBox">
+            <div class="Header">
+                <h1>Results Box</h1>
+            </div>
+            <div class="results">
+                {% if results %}
+                <h2>Results</h2>
+                <ul>
+                    {% for key, value in results.items() %}
+                    <li><strong>{{ key }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+                {% if explanation %}
+                <div class="ai-explanation">
+                    <h3>AI Explanation:</h3>
+                    <p>{{ explanation }}</p>
+                </div>
+                {% endif %}
+                {% elif error %}
+                <p class="error">{{ error }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script>
+        // Ensure all select elements default to their blank option on page load if no form data
+        document.addEventListener('DOMContentLoaded', () => {
+            const selects = document.querySelectorAll('select');
+            selects.forEach(select => {
+                if (!select.value) {
+                    select.value = ''; // Default to blank option
+                }
+            });
+        });
+
+        // Reset select to blank on focus (reselect), if it has a valid selection
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('focus', () => {
+                if (select.value !== '') {
+                    select.value = ''; // Default to blank option on reselect
+                }
+            });
+        });
+
+        // Reset all form inputs and selects to default
+        function resetForm() {
+            const form = document.getElementById('transmitPowerForm');
+            const inputs = form.querySelectorAll('input[type="text"]');
+            const selects = form.querySelectorAll('select');
+            inputs.forEach(input => {
+                input.value = ''; // Clear all text inputs
+            });
+            selects.forEach(select => {
+                select.value = ''; // Default all selects to blank option
+            });
+        }
+
+        // Client-side form validation
+        document.getElementById('transmitPowerForm').addEventListener('submit', (e) => {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            const selects = document.querySelectorAll('select');
+            let errorMessage = '';
+
+            // Validate text inputs
+            inputs.forEach(input => {
+                if (!input.value.match(input.pattern)) {
+                    errorMessage += `Invalid input for ${input.previousElementSibling.textContent.trim().replace(':', '')}: Must be a number (e.g., 100 or -10.5).\n`;
+                }
+            });
+
+            // Validate select dropdowns
+            selects.forEach(select => {
+                if (select.value === '') {
+                    errorMessage += `Please select a value for ${select.previousElementSibling.textContent.trim().replace(':', '')}.\n`;
+                }
+            });
+
+            if (errorMessage) {
+                e.preventDefault();
+                alert(errorMessage);
+            }
+        });
+    </script>
+</body>
+
+</html>
